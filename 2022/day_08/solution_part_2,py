@@ -1,0 +1,44 @@
+DATA = 'input_data.txt'
+
+total: int = 0
+trees = []
+trees_score = []
+vertical = []
+with open(DATA) as data:
+    for idx, line in enumerate(data):
+        for char_idx, char in enumerate(line.strip()):
+            count = 0
+            for idx2, char2 in reversed(list(enumerate(line.strip()[:char_idx]))):
+                count += 1
+                if int(char2) >= int(char):
+                    break
+            count2 = 0
+            for idx2, char2 in enumerate(line.strip()[char_idx+1:]):
+                count2 += 1
+                if int(char2) >= int(char):
+                    break
+            trees.append((char_idx, idx))
+            trees_score.append(count*count2)
+
+            if len(vertical) <= char_idx:
+                vertical.append([])
+            vertical[char_idx].append(char)
+
+for idx, line in enumerate(vertical):
+    for char_idx, char in enumerate(line):
+        count = 0
+        for idx2, char2 in reversed(list(enumerate(line[:char_idx]))):
+            count += 1
+            if int(char2) >= int(char):
+                break
+        count2 = 0
+        for idx2, char2 in enumerate(line[char_idx+1:]):
+            count2 += 1
+            if int(char2) >= int(char):
+                break
+        trees_score[trees.index((idx, char_idx))] = trees_score[trees.index((idx, char_idx))] * count * count2
+
+print(max(trees_score))
+
+# print(len(visible_trees))
+# print(len([t for t in (set(tuple(i) for i in visible_trees))]))            
